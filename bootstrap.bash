@@ -14,6 +14,9 @@ mkdir -p /tmp/salt
 LOG=/tmp/salt/bootstrap.log
 
 apt-get install python-software-properties git python-pip build-essential python-dev ufw -y > >(tee -a $LOG) 2>&1
+
+# Anovamos pip aginha, porque versons velhas tenhem problemas de segurança.
+pip install --upgrade pip
 pip install gitpython > >(tee -a $LOG) 2>&1
 
 # O servidor vai aceitar todas as chaves que lhe enviem (ver "auto_accept: yes"
@@ -23,7 +26,8 @@ pip install gitpython > >(tee -a $LOG) 2>&1
 #
 # A configuraçom de salt que baixamos do repositório deveria estabelecer ũa
 # configuraçom definitiva para o guarda-fogo.
-ufw allow 22/tcp
+echo y | ufw reset --force
+ufw allow openssh
 echo y | ufw enable
 
 NOME_HOST=miga-amo
