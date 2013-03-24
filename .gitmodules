@@ -1,0 +1,3 @@
+[submodule "miga-salt"]
+	path = miga-salt
+	url = git://github.com/euccastro/miga-salt.git
