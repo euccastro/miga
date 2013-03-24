@@ -16,8 +16,9 @@ LOG=/tmp/salt/bootstrap.log
 apt-get install python-software-properties git python-pip build-essential python-dev ufw -y > >(tee -a $LOG) 2>&1
 
 # Anovamos pip aginha, porque versons velhas tenhem problemas de segurança.
-pip install --upgrade pip
-pip install gitpython > >(tee -a $LOG) 2>&1
+pip install --upgrade pip > >(tee -a $LOG) 2>&1
+# Bash ainda procura o pip v
+/usr/local/bin/pip install gitpython > >(tee -a $LOG) 2>&1
 
 # O servidor vai aceitar todas as chaves que lhe enviem (ver "auto_accept: yes"
 # embaixo).  Para que nom nos metam chaves de fóra, ativamos o guarda-fogo
