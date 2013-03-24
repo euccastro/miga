@@ -32,7 +32,7 @@ echo $NOME_HOST > /etc/hostname
 hostname -F /etc/hostname
 
 # Engado o meu hostname e máis o alias 'salt', empregado polo minion de Salt.
-sed -i "s/^127.0.0.1.*$/127.0.0.1 localhost salt $NOME_HOST/" /etc/hosts
+sed -i "s/^127.0.0.1.*$/127.0.0.1 $NOME_HOST localhost salt/" /etc/hosts
 
 # Partimos dum estado conhecido se nom é a primeira vez que corremos o script
 # (por exemplo, provando nũa máquina nova), e evitamos que apt-get nos
@@ -54,5 +54,9 @@ apt-get install salt-minion -y > >(tee -a $LOG) 2>&1
 service salt-minion stop > >(tee -a $LOG) 2>&1
 
 salt-call state.highstate > >(tee -a $LOG) 2>&1
+
+# A própria configuraçom de Salt deveria garantir isto, pero para estarmos
+# certos...
+service salt-minion start > >(tee -a $LOG) 2>&1
 
 echo "Salt levantado!" > >(tee -a $LOG) 2>&1
