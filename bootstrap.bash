@@ -2,7 +2,7 @@
 
 # Este script configura o servidor como um mestre e escravo de Salt
 # (http://saltstack.org) que recebe a configuraçom dum repositório de git.
-# 
+#
 # É necessário configurá-lo como mestre porque (que eu saiba) um nodo de Salt
 # sem mestre (masterless) nom pode obter a configuraçom de git.  Além disso,
 # este servidor pode ficar de mestre para levantar quaisquer outras máquinas
@@ -20,18 +20,18 @@ pip install gitpython > >(tee -a $LOG) 2>&1
 # embaixo).  Para que nom nos metam chaves de fóra, ativamos o guarda-fogo
 # (firewall), permitindo apenas o porto de SSH, por se houver que entrar
 # a amanhar algũa cousa.
-# 
+#
 # A configuraçom de salt que baixamos do repositório deveria estabelecer ũa
 # configuraçom definitiva para o guarda-fogo.
 ufw allow 22/tcp
 echo y | ufw enable
 
 NOME_HOST=miga-amo
-# Configuro o nome de host aqui para nom ter que anovar as chaves despois.
+# Configuramos o nome de host aqui para nom ter que anovar as chaves despois.
 echo $NOME_HOST > /etc/hostname
 hostname -F /etc/hostname
 
-# Engado o meu hostname e máis o alias 'salt', empregado polo minion de Salt.
+# Engadimos hostname e máis alias 'salt', empregado polo minion de Salt.
 sed -i "s/^127.0.0.1.*$/127.0.0.1 $NOME_HOST localhost salt/" /etc/hosts
 
 # Partimos dum estado conhecido se nom é a primeira vez que corremos o script
