@@ -13,6 +13,9 @@
 mkdir -p /tmp/salt
 LOG=/tmp/salt/bootstrap.log
 
+apt-get install python-software-properties git python-pip build-essential python-dev ufw -y > >(tee -a $LOG) 2>&1
+pip install gitpython > >(tee -a $LOG) 2>&1
+
 # O servidor vai aceitar todas as chaves que lhe enviem (ver "auto_accept: yes"
 # embaixo).  Para que nom nos metam chaves de fóra, ativamos o guarda-fogo
 # (firewall), permitindo apenas o porto de SSH, por se houver que entrar
@@ -21,14 +24,23 @@ LOG=/tmp/salt/bootstrap.log
 # A configuraçom de salt que baixamos do repositório deveria estabelecer ũa
 # configuraçom definitiva para o guarda-fogo.
 ufw allow 22/tcp
-ufw enable
+echo y | ufw enable
 
-echo "127.0.0.1 salt" >> /etc/hosts
+NOME_HOST=miga-amo
+# Configuro o nome de host aqui para nom ter que anovar as chaves despois.
+echo $NOME_HOST > /etc/hostname
+hostname -F /etc/hostname
+
+# Engado o meu hostname e máis o alias 'salt', empregado polo minion de Salt.
+sed -i "s/^127.0.0.1.*$/127.0.0.1 localhost salt $NOME_HOST/" /etc/hosts
+
+# Partimos dum estado conhecido se nom é a primeira vez que corremos o script
+# (por exemplo, provando nũa máquina nova), e evitamos que apt-get nos
+# pergunte o que fazer coa configuraçom existente.
+rm -rf /etc/salt
 
 add-apt-repository ppa:saltstack/salt -y > >(tee -a $LOG) 2>&1
 apt-get update -y > >(tee -a $LOG) 2>&1
-apt-get install git python-pip build-essential python-dev -y > >(tee -a $LOG) 2>&1
-pip install gitpython > >(tee -a $LOG) 2>&1
 apt-get install salt-master -y > >(tee -a $LOG) 2>&1
 
 mkdir -p /etc/salt
