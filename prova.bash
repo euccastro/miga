@@ -6,7 +6,7 @@
 git commit -am "$*"
 git push
 echo "Esperando para provar..."
-sleep 7
+sleep 15
 echo "Provando!"
 $(dirname $0)/anova.bash miga
 echo "Feito."

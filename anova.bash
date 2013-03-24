@@ -11,5 +11,6 @@ if [ -z $1 ]
         echo "Uso: $0 <endereço>"
         exit 1
 fi
-
-ssh $1 "sudo salt '*' state.highstate"
+LOGFILE=$(dirname $0)/anova.log
+echo > $LOGFILE
+ssh $1 "sudo salt-call state.highstate" > >(tee -a $LOGFILE) 2>&1
