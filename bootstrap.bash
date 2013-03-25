@@ -10,6 +10,8 @@
 #
 # Aqui só configuramos o imprescindível para aceder ao repositório.
 
+export DEBIAN_FRONTEND=noninteractive
+
 mkdir -p /tmp/salt
 LOG=/tmp/salt/bootstrap.log
 
@@ -46,6 +48,8 @@ rm -rf /etc/salt
 
 add-apt-repository ppa:saltstack/salt -y > >(tee -a $LOG) 2>&1
 apt-get update -y > >(tee -a $LOG) 2>&1
+apt-get upgrade -y > >(tee -a $LOG) 2>&1
+apt-get autoremove -y > >(tee -a $LOG) 2>&1
 apt-get install salt-master -y > >(tee -a $LOG) 2>&1
 
 mkdir -p /etc/salt
