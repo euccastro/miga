@@ -14,3 +14,8 @@ fi
 LOGFILE=$(dirname $0)/anova.log
 echo > $LOGFILE
 ssh $1 "sudo salt-call state.highstate" > >(tee -a $LOGFILE) 2>&1
+
+echo "Erros:"
+grep -i error $LOGFILE
+grep False $LOGFILE
+echo "/Erros"
