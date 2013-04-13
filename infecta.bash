@@ -19,3 +19,4 @@ fi
 
 scp bootstrap.bash $1:
 ssh $1 "sudo ./bootstrap.bash"
+./anova.bash $1
