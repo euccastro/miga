@@ -6,17 +6,23 @@
 #
 # Exemplo: ./anova.bash es@mancomunidadeintegralgalega.net
 
-if [ -z $1 ]
-    then
-        echo "Uso: $0 <endereço>"
-        exit 1
+if [ $1 ]
+then
+    MIGA=$1
 fi
+
+if [ -z $MIGA ]
+then
+    echo "Uso: $0 <endereço>"
+    exit 1
+fi
+
 LOGFILE=$(dirname $0)/anova.log
 echo > $LOGFILE
-rsync -azLk salt/ $1:salt > >(tee -a $LOGFILE) 2>&1
-ssh $1 "sudo rm -rf /srv/salt" > >(tee -a $LOGFILE) 2>&1
-ssh $1 "sudo cp -r salt /srv/salt" > >(tee -a $LOGFILE) 2>&1
-ssh $1 "sudo salt-call state.highstate" > >(tee -a $LOGFILE) 2>&1
+rsync -azLk salt/ $MIGA:salt > >(tee -a $LOGFILE) 2>&1
+ssh $MIGA "sudo rm -rf /srv/salt" > >(tee -a $LOGFILE) 2>&1
+ssh $MIGA "sudo cp -r salt /srv/salt" > >(tee -a $LOGFILE) 2>&1
+ssh $MIGA "sudo salt-call state.highstate" > >(tee -a $LOGFILE) 2>&1
 
 echo "Erros:"
 grep -i error $LOGFILE

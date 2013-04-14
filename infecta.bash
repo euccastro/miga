@@ -11,12 +11,17 @@
 #
 # Exemplo: ./infecta.bash root@miga
 
-if [ -z $1 ]
-    then
-        echo "Uso: $0 <endereço>"
-        exit 1
+if [ $1 ]
+then
+    MIGA=$1
 fi
 
-scp bootstrap.bash $1:
-ssh $1 "sudo ./bootstrap.bash"
-./anova.bash $1
+if [ -z $MIGA ]
+then
+    echo "Uso: $0 <endereço>"
+    exit 1
+fi
+
+scp bootstrap.bash $MIGA:
+ssh $MIGA "sudo ./bootstrap.bash"
+./anova.bash $MIGA
