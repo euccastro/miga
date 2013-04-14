@@ -19,7 +19,7 @@ fi
 
 LOGFILE=$(dirname $0)/anova.log
 echo > $LOGFILE
-rsync -azLk salt/ $MIGA:salt > >(tee -a $LOGFILE) 2>&1
+rsync -avzLk salt/ $MIGA:salt > >(tee -a $LOGFILE) 2>&1
 ssh $MIGA "sudo rm -rf /srv/salt" > >(tee -a $LOGFILE) 2>&1
 ssh $MIGA "sudo cp -r salt /srv/salt" > >(tee -a $LOGFILE) 2>&1
 ssh $MIGA "sudo salt-call state.highstate" > >(tee -a $LOGFILE) 2>&1
