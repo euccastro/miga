@@ -5,12 +5,20 @@ nginx:
         - enable: yes
         - require:
             - pkg: nginx
-        - watch:
-            - file: /etc/nginx/nginx.conf
     pkg.installed:
         - require:
             - pkg: old-nginx-purged
             - cmd: nginx-sources-updated
+
+# O nginx nom gosta de 'restart' nem de 'reload'.
+"kill -HUP $(cat /var/run/nginx.pid)":
+    cmd.wait:
+        - user: root
+        - require:
+            - service: nginx
+        - watch:
+            - file: /etc/nginx/nginx.conf
+
 apache2:
     service.dead:
         - enable: no
